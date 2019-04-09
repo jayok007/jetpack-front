@@ -6,6 +6,6 @@ cache: npm
 
 script:
   - npm run test:unit
-  - npm run mb:start
+  - npm run mb:start &
   - npm run test:e2e:ci
   - npm run build
