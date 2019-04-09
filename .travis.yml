@@ -1,0 +1,15 @@
+language: node_js
+
+node_js:
+  - "10"
+
+install:
+  - npm install
+  - npm run build
+  - npm run start.ci
+  - npm run mountebank.start.ci
+
+script:
+  - npm run unit.test.coverage
+  - npm run unit.test.mutation
+  - npm run ui.test
