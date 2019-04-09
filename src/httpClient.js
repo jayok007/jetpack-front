@@ -1,27 +1,29 @@
 export default {
-  fetch(url = '/', payload, method = 'GET') {
-    return window.fetch(url, {
-      method,
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+  fetch(url, method, payload) {
+    return window
+      .fetch(url, {
+        method,
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
   },
 
   get(url) {
-    return this.fetch(url).then(res => res.json())
+    return this.fetch(url, 'GET')
   },
 
   post(url, payload) {
-    return this.fetch(url, payload, 'POST')
+    return this.fetch(url, 'POST', payload)
   },
 
   put(url, payload) {
-    return this.fetch(url, payload, 'PUT')
+    return this.fetch(url, 'PUT', payload)
   },
 
-  delete(url, payload) {
-    return this.fetch(url, payload, 'DELETE')
+  delete(url) {
+    return this.fetch(url, 'DELETE')
   }
 }
