@@ -1,6 +1,6 @@
 <template>
-  <v-card>
-    <v-img :src="image" aspect-ratio="1" height="100"></v-img>
+  <v-card class="jetpack">
+    <v-img :src="image" aspect-ratio="2"></v-img>
 
     <v-card-title primary-title>
       <div>
@@ -9,8 +9,12 @@
     </v-card-title>
 
     <v-card-actions>
-      <v-btn flat color="orange">Share</v-btn>
-      <v-btn flat color="orange">Explore</v-btn>
+      <v-btn flat icon>
+        <v-icon>visibility</v-icon>
+      </v-btn>
+      <v-btn flat icon>
+        <v-icon>delete</v-icon>
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

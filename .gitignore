@@ -2,7 +2,8 @@
 node_modules
 /dist
 .stryker-tmp
-/tmp
+mb*.log
+/coverage
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/

@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "concurrently \"npm:vue:start\" \"npm:mb:start\"",
+    "vue:start": "vue-cli-service serve",
+    "mb:start": "mb  --configfile=tests/mock/imposters.json --allowInjection --loglevel=info",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit",
-    "mb:start": "mb --logfile=./tmp/mb.log --pidfile=./tmp/mb.pid --configfile=tests/mock/imposters.json --allowInjection --loglevel=debug"
+    "test:e2e": "concurrently \"vue-cli-service test:e2e\" \"npm:mb:start\"",
+    "test:e2e:ci": "vue-cli-service test:e2e --headless",
+    "test:unit": "vue-cli-service test:unit --coverage"
   },
   "dependencies": {
     "core-js": "^2.6.5",
@@ -35,6 +37,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
+    "concurrently": "^4.1.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "lint-staged": "^8.1.4",

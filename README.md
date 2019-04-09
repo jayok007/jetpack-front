@@ -1,5 +1,7 @@
 # front
 
+[![Build Status](https://travis-ci.com/jayok007/jetpack-front.svg?branch=master)](https://travis-ci.com/jayok007/jetpack-front)
+
 ## Project setup
 
 ```bash
