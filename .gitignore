@@ -2,6 +2,7 @@
 node_modules
 /dist
 .stryker-tmp
+mb.pid
 /coverage
 
 /tests/e2e/videos/
