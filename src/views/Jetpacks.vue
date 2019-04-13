@@ -30,7 +30,7 @@ export default {
   },
 
   created() {
-    httpClient.get('/jetpacks').then(jetpacks => (this.jetpacks = jetpacks))
+    httpClient.get('/api/jetpacks').then(jetpacks => (this.jetpacks = jetpacks))
   }
 }
 </script>
