@@ -9,24 +9,30 @@ const localVue = createLocalVue()
 localVue.use(Vuetify)
 
 describe('Jetpacks.vue', () => {
-  let jetpacks
+  let wrapper
 
   beforeEach(() => {
-    jetpacks = [
-      { id: '1', name: 'Toto' },
-      { id: '2', name: 'Tata' },
-      { id: '3', name: 'Titi' }
-    ]
-    httpClient.get = jest.fn(() => Promise.resolve(jetpacks))
-  })
+    httpClient.get = jest.fn(() =>
+      Promise.resolve([
+        { id: '1', name: 'Toto' },
+        { id: '2', name: 'Tata' },
+        { id: '3', name: 'Titi' }
+      ])
+    )
 
-  it('should fetch the jetpacks', async () => {
-    const wrapper = mount(Jetpacks, {
+    wrapper = mount(Jetpacks, {
       localVue,
       stubs: ['jetpack']
     })
+  })
+
+  it('should display all the jetpacks', async () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.findAll('jetpack-stub').length).toBe(3)
+  })
+
+  it('should call the jetpacks endpoint', () => {
+    expect(httpClient.get).toHaveBeenCalledWith('/api/jetpacks')
   })
 })

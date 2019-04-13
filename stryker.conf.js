@@ -1,14 +1,13 @@
-// This config was generated using a preset.
-// Please see the handbook for more information: https://github.com/stryker-mutator/stryker-handbook/blob/master/stryker/guides/vuejs.md#vuejs
-module.exports = function(config) {
+module.exports = config => {
   config.set({
-    mutate: ['src/**/*.js', 'src/**/*.ts', 'src/**/*.vue'],
+    mutate: ['src/httpClient.js', 'src/**/*.vue'],
     mutator: 'vue',
-    testRunner: 'jest',
-    jest: {
-      // config: require('path/to/your/custom/jestConfig.js')
+    coverageAnalysis: 'off',
+    commandRunner: {
+      command: 'npx vue-cli-service test:unit'
     },
-    reporters: ['progress', 'clear-text', 'html'],
-    coverageAnalysis: 'off'
+    thresholds: {
+      break: 70
+    }
   })
 }

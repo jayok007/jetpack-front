@@ -18,8 +18,7 @@
     "roboto-fontface": "*",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.5.5",
-    "vuex": "^3.0.1"
+    "vuetify": "^1.5.5"
   },
   "devDependencies": {
     "@stryker-mutator/core": "^1.2.0",
@@ -48,27 +47,13 @@
     "vue-template-compiler": "^2.5.21",
     "vuetify-loader": "^1.0.5"
   },
-  "jest": {
-    "verbose": true,
-    "testPathIgnorePatterns": [
-      "./node_modules/",
-      "./tests/ui/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 50,
-        "functions": 50,
-        "lines": 50,
-        "statements": 50
-      }
-    }
-  },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,vue}": [
       "vue-cli-service lint",
+      "vue-cli-service test:unit --findRelatedTests",
       "git add"
     ]
   }
