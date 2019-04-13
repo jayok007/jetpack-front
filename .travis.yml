@@ -2,7 +2,10 @@ language: node_js
 
 node_js: '10'
 
-cache: npm
+cache:
+  npm: true
+  directories:
+    - ~/.cache
 
 install:
   - npm install -g codecov stryker-cli@1.0.0
