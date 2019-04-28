@@ -8,13 +8,12 @@ cache:
     - ~/.cache
 
 install:
-  - npm install -g codecov stryker-cli@1.0.0
+  - npm install -g codecov
   - npm install
 
 script:
   - npm run test:unit
-  - stryker run
-  - npm run mb:start &
+  - npm run test:mut
   - npm run test:e2e:ci
   - npm run build
 
