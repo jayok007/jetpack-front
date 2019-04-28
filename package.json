@@ -10,6 +10,7 @@
     "lint": "vue-cli-service lint",
     "test:e2e": "start-server-and-test mb:start http://localhost:4545 \"vue-cli-service test:e2e\"",
     "test:e2e:ci": "start-server-and-test mb:start http://localhost:4545 \"vue-cli-service test:e2e --headless\"",
+    "test:mut": "stryker run",
     "test:unit": "vue-cli-service test:unit --coverage"
   },
   "dependencies": {
