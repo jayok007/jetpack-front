@@ -1,0 +1,23 @@
+{
+  "imposters": [
+    {
+      "port": 4545,
+      "protocol": "http",
+      "stubs": [
+        {
+          "predicates": [
+            { "equals": { "method": "GET", "path": "/jetpacks" } }
+          ],
+          "responses": [
+            {
+              "is": {
+                "headers": { "Content-Type": "application/json" },
+                "body": <% include jetpacks.json %>
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
