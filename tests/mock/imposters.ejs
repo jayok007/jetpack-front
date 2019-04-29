@@ -9,12 +9,15 @@
             { "equals": { "method": "GET", "path": "/jetpacks" } }
           ],
           "responses": [
-            {
-              "is": {
-                "headers": { "Content-Type": "application/json" },
-                "body": <% include jetpacks.json %>
-              }
-            }
+            { "inject": "<%- stringify(filename, 'getJetpacks.ejs') %>" }
+          ]
+        },
+        {
+          "predicates": [
+            { "equals": { "method": "POST", "path": "/jetpacks" } }
+          ],
+          "responses": [
+            { "inject": "<%- stringify(filename, 'createJetpack.ejs') %>" }
           ]
         }
       ]

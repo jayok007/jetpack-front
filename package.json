@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "start-server-and-test mb:start http://localhost:4545 vue:start",
     "vue:start": "vue-cli-service serve --open",
-    "mb:start": "mb  --configfile tests/mock/imposters.ejs --nologfile",
+    "mb:start": "mb  --configfile tests/mock/imposters.ejs --nologfile --allowInjection",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "start-server-and-test mb:start http://localhost:4545 \"vue-cli-service test:e2e\"",

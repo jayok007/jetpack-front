@@ -1,0 +1,21 @@
+(request, state, logger) => {
+  state.count = state.count || 0
+  state.count += 1
+  logger.info(`Generate fake jetpack n°${state.count}`)
+
+  state.jetpacks = state.jetpacks || []
+  const { name, image } = JSON.parse(request.body)
+  const jetpack = {
+    id: `${state.count}`,
+    name,
+    image
+  }
+  state.jetpacks.push(jetpack)
+  
+  return {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: jetpack
+  }
+}
