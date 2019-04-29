@@ -8,7 +8,7 @@
 
     <v-content>
       <v-container grid-list-lg>
-        <router-view />
+        <router-view></router-view>
       </v-container>
     </v-content>
   </v-app>
