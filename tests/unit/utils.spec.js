@@ -1,0 +1,14 @@
+import { encodeImageFile } from '@/utils'
+
+describe('utils', () => {
+  it('should convert a file to a base64 string', async () => {
+    const [name, base64] = await encodeImageFile(
+      new File([''], 'test.png', {
+        type: 'image/png'
+      })
+    )
+
+    expect(name).toBe('test.png')
+    expect(base64).toBe('data:image/png;base64,')
+  })
+})

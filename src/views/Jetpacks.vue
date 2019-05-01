@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="400">
       <template v-slot:activator="{ on }">
         <v-btn
           dark
@@ -16,44 +16,52 @@
         </v-btn>
       </template>
 
-      <div data-test="createJetpackForm">
-        <v-card>
-          <v-card-title class="headline">Créer un jetpack</v-card-title>
+      <v-card data-test="createJetpackForm">
+        <v-card-title class="headline">Créer un jetpack</v-card-title>
 
-          <v-card-text>
-            <v-form ref="form">
-              <v-text-field
-                v-model="name"
-                data-test="nameInput"
-                label="Nom"
-                :rules="[v => !!v || 'Champ obligatoire']"
-              ></v-text-field>
-              <v-text-field
-                v-model="image"
-                data-test="imageInput"
-                label="Image"
-                :rules="[v => !!v || 'Champ obligatoire']"
-              ></v-text-field>
-            </v-form>
-          </v-card-text>
+        <v-card-text>
+          <v-form ref="form">
+            <v-text-field
+              v-model="name"
+              data-test="nameInput"
+              label="Nom"
+              :rules="[v => !!v || 'Champ obligatoire']"
+            ></v-text-field>
+            <v-text-field
+              ref="inputFileName"
+              :value="fileName"
+              prepend-inner-icon="image"
+              label="Image"
+              @click="$refs.inputFile.click()"
+              @keyup.enter="$refs.inputFile.click()"
+              readonly
+              :rules="[v => !!v || 'Champ obligatoire']"
+            ></v-text-field>
+            <input
+              ref="inputFile"
+              v-show="false"
+              accept="image/*"
+              @change="loadImage"
+              type="file"
+              data-test="imageInput"
+            />
+            <v-img v-show="image" :src="image" width="150"></v-img>
+          </v-form>
+        </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              data-test="saveBtn"
-              type="submit"
-              :loading="!dialog"
-              color="primary"
-              outline
-              @click="saveJetpack"
-              >Créer</v-btn
-            >
-            <v-btn color="primary" outline @click="dialog = false"
-              >Annuler</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            data-test="saveBtn"
+            :loading="!dialog"
+            color="primary"
+            outline
+            @click="saveJetpack"
+            >Créer</v-btn
+          >
+          <v-btn color="primary" outline @click="dialog = false">Annuler</v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
 
     <v-layout row wrap>
@@ -71,7 +79,8 @@
 
 <script>
 import httpClient from '@/httpClient'
-import Jetpack from '../components/Jetpack'
+import Jetpack from '@/components/Jetpack'
+import { encodeImageFile } from '../utils'
 
 export default {
   name: 'Jetpacks',
@@ -85,6 +94,7 @@ export default {
       jetpacks: [],
       name: '',
       image: '',
+      fileName: '',
       dialog: false,
       addForm: false
     }
@@ -99,6 +109,8 @@ export default {
       if (!this.dialog) {
         this.name = ''
         this.image = ''
+        this.fileName = ''
+        this.$refs.inputFile.value = null
         this.$refs.form.resetValidation()
       }
     }
@@ -115,6 +127,18 @@ export default {
         })
         .then(jetpack => this.jetpacks.push(jetpack))
         .finally(() => (this.dialog = false))
+    },
+
+    async loadImage({
+      target: {
+        files: [img]
+      }
+    }) {
+      if (!img) return
+
+      const [fileName, base64Img] = await encodeImageFile(img)
+      this.fileName = fileName
+      this.image = base64Img
     }
   }
 }

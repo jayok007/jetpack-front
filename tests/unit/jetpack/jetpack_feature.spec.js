@@ -1,6 +1,9 @@
 import { mount } from '@vue/test-utils'
 import httpClient from '@/httpClient'
 import Jetpacks from '@/views/Jetpacks'
+import { encodeImageFile } from '@/utils'
+
+jest.mock('@/utils')
 
 describe('Jetpack feature', () => {
   let wrapper
@@ -18,6 +21,8 @@ describe('Jetpack feature', () => {
       })
     })
 
+    encodeImageFile.mockReturnValue(Promise.resolve(['test.png', 'Image']))
+
     wrapper = mount(Jetpacks)
   })
 
@@ -32,7 +37,16 @@ describe('Jetpack feature', () => {
   it('should create a jetpack', async () => {
     wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
     wrapper.find('[data-test="nameInput"]').setValue('Test')
-    wrapper.find('[data-test="imageInput"]').setValue('Image')
+    const input = wrapper.find('[data-test="imageInput"]')
+    Object.defineProperty(input.element, 'files', {
+      value: [
+        new File([''], 'test.png', {
+          type: 'image/png'
+        })
+      ]
+    })
+    input.trigger('change')
+    await wrapper.vm.$nextTick()
     wrapper.find('[data-test="saveBtn"]').trigger('click')
 
     await wrapper.vm.$nextTick()

@@ -1,8 +1,10 @@
 import { mount } from '@vue/test-utils'
 import httpClient from '@/httpClient'
 import Jetpacks from '@/views/Jetpacks'
+import { encodeImageFile } from '@/utils'
 
 jest.mock('@/httpClient')
+jest.mock('@/utils')
 
 describe('Jetpacks.vue', () => {
   let wrapper
@@ -16,6 +18,7 @@ describe('Jetpacks.vue', () => {
         image: j.image
       })
     )
+    encodeImageFile.mockReturnValue(Promise.resolve(['test.png', 'Image']))
 
     wrapper = mount(Jetpacks)
   })
@@ -41,8 +44,19 @@ describe('Jetpacks.vue', () => {
   describe('Jetpack creation', () => {
     beforeEach(async () => {
       wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
+
       wrapper.find('[data-test="nameInput"]').setValue('Test')
-      wrapper.find('[data-test="imageInput"]').setValue('Image')
+      const input = wrapper.find('[data-test="imageInput"]')
+      Object.defineProperty(input.element, 'files', {
+        value: [
+          new File([''], 'test.png', {
+            type: 'image/png'
+          })
+        ]
+      })
+      input.trigger('change')
+      await wrapper.vm.$nextTick()
+
       wrapper.find('[data-test="saveBtn"]').trigger('click')
       await wrapper.vm.$nextTick()
     })
@@ -66,6 +80,7 @@ describe('Jetpacks.vue', () => {
     it('should clean the input values', () => {
       expect(wrapper.vm.name).toBe('')
       expect(wrapper.vm.image).toBe('')
+      expect(wrapper.vm.fileName).toBe('')
     })
   })
 })

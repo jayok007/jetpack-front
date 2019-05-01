@@ -3,5 +3,6 @@ import Vuetify from 'vuetify'
 
 Vue.use(Vuetify)
 
-// to prevent Vuetify warning
-console.warn = jest.fn()
+// to prevent Vuetify stupid warning
+console.warn = () => {}
+console.info = () => {}
