@@ -18,7 +18,7 @@ describe('Jetpacks.vue', () => {
         image: j.image
       })
     )
-    encodeImageFile.mockReturnValue(Promise.resolve(['test.png', 'Image']))
+    encodeImageFile.mockReturnValue(Promise.resolve('Image'))
 
     wrapper = mount(Jetpacks)
   })

@@ -95,8 +95,7 @@ export default {
       name: '',
       image: '',
       fileName: '',
-      dialog: false,
-      addForm: false
+      dialog: false
     }
   },
 
@@ -136,9 +135,8 @@ export default {
     }) {
       if (!img) return
 
-      const [fileName, base64Img] = await encodeImageFile(img)
-      this.fileName = fileName
-      this.image = base64Img
+      this.fileName = img.name
+      this.image = await encodeImageFile(img)
     }
   }
 }

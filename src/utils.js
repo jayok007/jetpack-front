@@ -3,7 +3,7 @@ export const encodeImageFile = img => {
     const reader = new FileReader()
     reader.readAsDataURL(img)
     reader.onloadend = () => {
-      resolve([img.name, reader.result])
+      resolve(reader.result)
     }
   })
 }
