@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card data-test="jetpack">
     <v-img :src="image" aspect-ratio="2"></v-img>
 
     <v-card-title primary-title>
