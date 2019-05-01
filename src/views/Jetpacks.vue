@@ -5,7 +5,7 @@
         <v-btn
           dark
           fab
-          color="indigo"
+          color="primary"
           fixed
           left
           bottom
@@ -21,13 +21,36 @@
           <v-card-title class="headline">Créer un jetpack</v-card-title>
 
           <v-card-text>
-            <v-text-field v-model="name" data-test="nameInput"></v-text-field>
-            <v-text-field v-model="image" data-test="imageInput"></v-text-field>
+            <v-form ref="form">
+              <v-text-field
+                v-model="name"
+                data-test="nameInput"
+                label="Nom"
+                :rules="[v => !!v || 'Champ obligatoire']"
+              ></v-text-field>
+              <v-text-field
+                v-model="image"
+                data-test="imageInput"
+                label="Image"
+                :rules="[v => !!v || 'Champ obligatoire']"
+              ></v-text-field>
+            </v-form>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn data-test="saveBtn" @click="saveJetpack">Ajouter</v-btn>
+            <v-btn
+              data-test="saveBtn"
+              type="submit"
+              :loading="!dialog"
+              color="primary"
+              outline
+              @click="saveJetpack"
+              >Créer</v-btn
+            >
+            <v-btn color="primary" outline @click="dialog = false"
+              >Annuler</v-btn
+            >
           </v-card-actions>
         </v-card>
       </div>
@@ -71,14 +94,27 @@ export default {
     httpClient.get('/api/jetpacks').then(jetpacks => (this.jetpacks = jetpacks))
   },
 
+  watch: {
+    dialog() {
+      if (!this.dialog) {
+        this.name = ''
+        this.image = ''
+        this.$refs.form.resetValidation()
+      }
+    }
+  },
+
   methods: {
     saveJetpack() {
+      if (!this.$refs.form.validate()) return
+
       httpClient
         .post('/api/jetpacks', {
           name: this.name,
           image: this.image
         })
         .then(jetpack => this.jetpacks.push(jetpack))
+        .finally(() => (this.dialog = false))
     }
   }
 }

@@ -24,32 +24,48 @@ describe('Jetpacks.vue', () => {
     expect(httpClient.get).toHaveBeenCalledWith('/api/jetpacks')
   })
 
+  it('should display the dialog', () => {
+    wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
+
+    const form = wrapper.find('[data-test="createJetpackForm"]')
+    expect(form.isVisible()).toBe(true)
+  })
+
+  it('should not send data when name and image are missing', () => {
+    wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
+    wrapper.find('[data-test="saveBtn"]').trigger('click')
+
+    expect(httpClient.post).not.toHaveBeenCalled()
+  })
+
   describe('Jetpack creation', () => {
     beforeEach(async () => {
-      const addBtn = wrapper.find('[data-test="createJetpackBtn"]')
-
-      addBtn.trigger('click')
-      await wrapper.vm.$nextTick()
-    })
-
-    it('should show the jetpack form', async () => {
-      const form = wrapper.find('[data-test="createJetpackForm"]')
-
-      expect(form.isVisible()).toBe(true)
-    })
-
-    it('should send the jetpack on save', async () => {
+      wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
       wrapper.find('[data-test="nameInput"]').setValue('Test')
       wrapper.find('[data-test="imageInput"]').setValue('Image')
-
       wrapper.find('[data-test="saveBtn"]').trigger('click')
       await wrapper.vm.$nextTick()
+    })
 
+    it('should send the jetpack on save', () => {
       expect(httpClient.post).toHaveBeenCalledWith('/api/jetpacks', {
         name: 'Test',
         image: 'Image'
       })
+    })
+
+    it('should add the new jetpack to the list', () => {
       expect(wrapper.text()).toMatch('Test')
+    })
+
+    it('should hide the dialog', () => {
+      const form = wrapper.find('[data-test="createJetpackForm"]')
+      expect(form.isVisible()).toBe(false)
+    })
+
+    it('should clean the input values', () => {
+      expect(wrapper.vm.name).toBe('')
+      expect(wrapper.vm.image).toBe('')
     })
   })
 })
