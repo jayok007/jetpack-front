@@ -22,5 +22,6 @@ module.exports = {
       lines: 70,
       statements: 70
     }
-  }
+  },
+  setupFiles: ['<rootDir>/tests/unit/setup.js']
 }
