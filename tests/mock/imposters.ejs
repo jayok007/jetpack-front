@@ -19,6 +19,22 @@
           "responses": [
             { "inject": "<%- stringify(filename, 'createJetpack.ejs') %>" }
           ]
+        },
+        {
+          "predicates": [
+            { "equals": { "method": "GET", "path": "/availability/jetpacks" } }
+          ],
+          "responses": [
+            { "inject": "<%- stringify(filename, 'getJetpackToBook.ejs') %>" }
+          ]
+        },
+        {
+          "predicates": [
+            { "equals": { "method": "POST", "path": "/booking" } }
+          ],
+          "responses": [
+            { "inject": "<%- stringify(filename, 'bookingJetpack.ejs') %>" }
+          ]
         }
       ]
     }

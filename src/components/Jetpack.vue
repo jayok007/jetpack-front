@@ -9,6 +9,9 @@
     </v-card-title>
 
     <v-card-actions>
+      <v-btn flat icon v-if="showBooking" @click="book">
+        <v-icon>bookmark</v-icon>
+      </v-btn>
       <v-btn flat icon>
         <v-icon>visibility</v-icon>
       </v-btn>
@@ -26,7 +29,13 @@ export default {
   props: {
     id: String,
     name: String,
-    image: String
+    image: String,
+    showBooking: { type: Boolean, default: false }
+  },
+  methods: {
+    book() {
+      this.$emit('book', this.id)
+    }
   }
 }
 </script>
