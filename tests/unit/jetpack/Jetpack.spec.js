@@ -1,17 +1,11 @@
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import Jetpack from '@/components/Jetpack'
-import Vuetify from 'vuetify'
-
-const localVue = createLocalVue()
-localVue.use(Vuetify)
-localVue.config.silent = true
 
 describe('Jetpack.vue', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = mount(Jetpack, {
-      localVue,
       propsData: {
         name: 'Test jetpack',
         image: 'base 64 image'

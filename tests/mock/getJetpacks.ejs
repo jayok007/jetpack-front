@@ -1,0 +1,9 @@
+(request, state) => {
+  state.jetpacks = state.jetpacks || <% include jetpacks.json %>
+  return {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: state.jetpacks
+  }
+}
