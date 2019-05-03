@@ -9,7 +9,7 @@
     </v-card-title>
 
     <v-card-actions>
-      <v-btn flat icon v-if="showBooking" @click="book">
+      <v-btn flat icon v-if="showBooking" data-test="bookingBtn" @click="book">
         <v-icon>bookmark</v-icon>
       </v-btn>
       <v-btn flat icon>

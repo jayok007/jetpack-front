@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>Formulaire de Recherche et de Réservation de Jetpack</h1>
-    <v-container grid-list-md>
+    <v-container data-test="searchForm" grid-list-md>
       <v-layout row wrap>
         <v-flex xs12 lg6>
           <v-menu
@@ -16,9 +16,10 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
+                data-test="dateStart"
                 :disabled="!isSearchOn"
                 v-model="dateStart"
-                label="Picker without buttons"
+                label="Date de début"
                 prepend-icon="event"
                 readonly
                 v-on="on"
@@ -44,9 +45,10 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
+                data-test="dateEnd"
                 :disabled="!isSearchOn"
                 v-model="dateEnd"
-                label="Picker without buttons"
+                label="Date de fin"
                 prepend-icon="event"
                 readonly
                 v-on="on"
@@ -60,13 +62,21 @@
         </v-flex>
       </v-layout>
       <div class="text-xs-center">
-        <v-btn round color="" v-if="isSearchOn" @click="searchJetpack" dark
+        <v-btn
+          data-test="searchBtn"
+          round
+          color=""
+          v-if="isSearchOn"
+          @click="searchJetpack"
+          dark
           >Rechercher
         </v-btn>
       </div>
     </v-container>
     <v-container v-if="!isSearchOn">
-      <h1>Resultat :</h1>
+      <h3 data-test="searchResult">
+        {{ this.jetpacks.length }} jetpack(s) disponnible :
+      </h3>
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="(jetpack, i) in jetpacks" :key="i">
           <jetpack
@@ -79,7 +89,7 @@
         </v-flex>
       </v-layout>
       <div class="text-xs-center">
-        <v-btn round color="" @click="newSearch" dark>
+        <v-btn round color="" data-test="newSearch" @click="newSearch" dark>
           Nouvelle recherche
         </v-btn>
       </div>
@@ -125,7 +135,7 @@ export default {
           dateEnd: this.dateEnd
         })
         .then(jetpacks => (this.jetpacks = jetpacks))
-        .finally(() => (this.dialog = false))
+        .finally(() => (this.isSearchOn = true))
     }
   }
 }

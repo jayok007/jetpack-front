@@ -2,13 +2,11 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline">
-        <span @click="$router.push('/')">Rocket.js</span>
+        <span to="/">Rocket.js</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat @click="$router.push('/search')">
-          <v-icon>search</v-icon> Rechercher</v-btn
-        >
+        <v-btn flat to="/search"> <v-icon>search</v-icon> Rechercher</v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
