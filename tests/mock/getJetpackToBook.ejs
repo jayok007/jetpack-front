@@ -8,23 +8,11 @@
   var idBookings = state.bookings.map((item)=>{
       return item.idJetpack
   })
-  logger.info(`idBookings`)
-  logger.info(idBookings)
-
-
-  logger.info(`jetpackNotBooked`)
-  logger.info(state.jetpackNotBooked)
   
   
   state.jetpackNotBooked = jetpacks.filter((item) => {
-    
-    logger.info(`Le jet est il dispo ? `)
-    logger.info(item.id)
-    logger.info(!idBookings.includes(item.id))
-
     return (!idBookings.includes(item.id));
   })
-  logger.info(JSON.stringify(state.jetpackNotBooked))
 
 
   return {

@@ -6,9 +6,6 @@
   state.idBooking += 1
 
   const { idJetpack, dateStart, dateEnd } = JSON.parse(request.body)
-  logger.info(`idJetpack : `,idJetpack)
-  logger.info(`dateStart : `,dateStart)
-  logger.info(`dateEnd : `,dateEnd)
 
   logger.info(`Generate fake booking n°${state.idBooking}`)
 
@@ -18,9 +15,6 @@
     dateStart,
     dateEnd
   }
-  logger.info(`booking : `,JSON.stringify(booking))
-  logger.info(`state.bookings : `,JSON.stringify(state.bookings))
-
   state.bookings.push(booking)
 
   var idBookings = state.bookings.map((item)=>{

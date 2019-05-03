@@ -16,6 +16,7 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
+                :disabled="!isSearchOn"
                 v-model="dateStart"
                 label="Picker without buttons"
                 prepend-icon="event"
@@ -43,6 +44,7 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
+                :disabled="!isSearchOn"
                 v-model="dateEnd"
                 label="Picker without buttons"
                 prepend-icon="event"
@@ -58,11 +60,13 @@
         </v-flex>
       </v-layout>
       <div class="text-xs-center">
-        <v-btn round color="" @click="searchJetpack" dark>Rechercher </v-btn>
+        <v-btn round color="" v-if="isSearchOn" @click="searchJetpack" dark
+          >Rechercher
+        </v-btn>
       </div>
     </v-container>
-    <v-container>
-      <h1 v-if="jetpacks.length">Resultat :</h1>
+    <v-container v-if="!isSearchOn">
+      <h1>Resultat :</h1>
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="(jetpack, i) in jetpacks" :key="i">
           <jetpack
@@ -74,6 +78,11 @@
           ></jetpack>
         </v-flex>
       </v-layout>
+      <div class="text-xs-center">
+        <v-btn round color="" @click="newSearch" dark>
+          Nouvelle recherche
+        </v-btn>
+      </div>
     </v-container>
   </div>
 </template>
@@ -93,10 +102,15 @@ export default {
     dateEnd: new Date().toISOString().substr(0, 10),
     menu1: false,
     menu2: false,
+    isSearchOn: true,
     jetpacks: []
   }),
   methods: {
+    newSearch() {
+      this.isSearchOn = true
+    },
     searchJetpack() {
+      this.isSearchOn = false
       httpClient
         .get('/api/availability/jetpacks', {
           params: { dateStart: this.dateStart, dateEnd: this.dateEnd }
