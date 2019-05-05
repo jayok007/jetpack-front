@@ -10,17 +10,18 @@ describe('Jetpacks.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    httpClient.get = jest.fn(() => Promise.resolve([]))
-    httpClient.post = jest.fn((_, j) =>
-      Promise.resolve({
-        id: 'my-id',
-        name: j.name,
-        image: j.image
-      })
+    httpClient.get = jest.fn(() =>
+      Promise.resolve([{ id: 'test', name: 'Name', image: 'Image' }])
+    )
+    httpClient.post = jest.fn(() => Promise.resolve({}))
+    httpClient.put = jest.fn(() =>
+      Promise.resolve({ id: 'test', name: 'Updated', image: 'Updated' })
     )
     encodeImageFile.mockReturnValue(Promise.resolve('Image'))
 
-    wrapper = mount(Jetpacks)
+    wrapper = mount(Jetpacks, {
+      stubs: ['jetpack-form']
+    })
   })
 
   it('should fetch jetpacks on create', () => {
@@ -34,53 +35,48 @@ describe('Jetpacks.vue', () => {
     expect(form.isVisible()).toBe(true)
   })
 
-  it('should not send data when name and image are missing', () => {
+  it('should create a jetpack', () => {
+    const newJetpack = { name: 'Name', image: 'Image' }
+    const form = wrapper.find('[data-test="createJetpackForm"]')
     wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
-    wrapper.find('[data-test="saveBtn"]').trigger('click')
 
-    expect(httpClient.post).not.toHaveBeenCalled()
+    form.vm.$emit('addJetpack', newJetpack)
+
+    expect(httpClient.post).toBeCalledWith('/api/jetpacks', newJetpack)
   })
 
-  describe('Jetpack creation', () => {
-    beforeEach(async () => {
-      wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
+  it('should hide the dialog', () => {
+    wrapper.find('[data-test="createJetpackBtn"]').trigger('click')
+    const form = wrapper.find('[data-test="createJetpackForm"]')
 
-      wrapper.find('[data-test="nameInput"]').setValue('Test')
-      const input = wrapper.find('[data-test="imageInput"]')
-      Object.defineProperty(input.element, 'files', {
-        value: [
-          new File([''], 'test.png', {
-            type: 'image/png'
-          })
-        ]
-      })
-      input.trigger('change')
-      await wrapper.vm.$nextTick()
+    form.vm.$emit('cancel')
 
-      wrapper.find('[data-test="saveBtn"]').trigger('click')
-      await wrapper.vm.$nextTick()
+    expect(form.isVisible()).toBe(false)
+  })
+
+  it('should update a jetpack', () => {
+    const firstJetpack = wrapper.find('[data-test="jetpack"]')
+
+    firstJetpack.vm.$emit('update', {
+      id: 'test',
+      name: 'Updated',
+      image: 'Updated'
     })
 
-    it('should send the jetpack on save', () => {
-      expect(httpClient.post).toHaveBeenCalledWith('/api/jetpacks', {
-        name: 'Test',
-        image: 'Image'
-      })
+    expect(httpClient.put).toHaveBeenCalledWith('/api/jetpacks/test', {
+      name: 'Updated',
+      image: 'Updated'
     })
+  })
 
-    it('should add the new jetpack to the list', () => {
-      expect(wrapper.text()).toMatch('Test')
-    })
+  it('should mutate the old jetpack', async () => {
+    const firstJetpack = wrapper.find('[data-test="jetpack"]')
 
-    it('should hide the dialog', () => {
-      const form = wrapper.find('[data-test="createJetpackForm"]')
-      expect(form.isVisible()).toBe(false)
-    })
+    firstJetpack.vm.$emit('update', { id: 'test' })
+    await wrapper.vm.$nextTick()
 
-    it('should clean the input values', () => {
-      expect(wrapper.vm.name).toBe('')
-      expect(wrapper.vm.image).toBe('')
-      expect(wrapper.vm.fileName).toBe('')
-    })
+    expect(wrapper.vm.jetpacks).toEqual([
+      { id: 'test', name: 'Updated', image: 'Updated' }
+    ])
   })
 })
