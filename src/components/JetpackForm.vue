@@ -1,6 +1,6 @@
 <template>
-  <v-card data-test="createJetpackForm">
-    <v-card-title class="headline">Créer un jetpack</v-card-title>
+  <v-card>
+    <v-card-title class="headline">{{ title }}</v-card-title>
 
     <v-card-text>
       <v-form ref="form">
@@ -18,7 +18,6 @@
           @click="$refs.inputFile.click()"
           @keyup.enter="$refs.inputFile.click()"
           readonly
-          :rules="[v => !!v || 'Champ obligatoire']"
         ></v-text-field>
         <input
           ref="inputFile"
@@ -34,9 +33,10 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn data-test="saveBtn" color="primary" flat @click="saveJetpack"
-        >Créer</v-btn
-      >
+      <v-btn data-test="saveBtn" color="primary" flat @click="saveJetpack">
+        {{ saveText }}
+      </v-btn>
+
       <v-btn color="primary" flat @click="resetForm" data-test="cancelBtn"
         >Annuler</v-btn
       >
@@ -50,6 +50,23 @@ import { encodeImageFile } from '../utils'
 export default {
   name: 'JetpackForm',
 
+  props: {
+    title: {
+      type: String,
+      default: 'Créer un jetpack'
+    },
+    defaultName: {
+      type: String
+    },
+    defaultImage: {
+      type: String
+    },
+    saveText: {
+      String,
+      default: 'Créer'
+    }
+  },
+
   data() {
     return {
       name: '',
@@ -58,9 +75,24 @@ export default {
     }
   },
 
+  watch: {
+    defaultName: {
+      immediate: true,
+      handler() {
+        if (this.defaultName) this.name = this.defaultName
+      }
+    },
+    defaultImage: {
+      immediate: true,
+      handler() {
+        if (this.defaultImage) this.image = this.defaultImage
+      }
+    }
+  },
+
   methods: {
     saveJetpack() {
-      if (!this.$refs.form.validate()) return
+      if (!this.$refs.form.validate() || !this.image) return
 
       this.$emit('addJetpack', {
         name: this.name,
@@ -71,8 +103,8 @@ export default {
 
     resetForm() {
       this.fileName = ''
-      this.name = ''
-      this.image = ''
+      this.name = this.defaultName ? this.defaultName : ''
+      this.image = this.defaultImage ? this.defaultImage : ''
       this.$refs.inputFile.value = null
       this.$refs.form.resetValidation()
       this.$emit('cancel')

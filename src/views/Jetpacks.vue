@@ -27,6 +27,7 @@
       <v-flex xs12 sm6 md4 lg3 v-for="(jetpack, i) in jetpacks" :key="i">
         <jetpack
           data-test="jetpack"
+          @update="updateJetpack"
           :id="jetpack.id"
           :name="jetpack.name"
           :image="jetpack.image"
@@ -69,6 +70,16 @@ export default {
         })
         .then(jetpack => this.jetpacks.push(jetpack))
         .finally(() => (this.dialog = false))
+    },
+
+    updateJetpack({ id, name, image }) {
+      console.log(id)
+      httpClient
+        .put(`/api/jetpacks/${id}`, { name, image })
+        .then(updatedJetpack => {
+          const jetpack = this.jetpacks.find(j => j.id === id)
+          Object.assign(jetpack, updatedJetpack)
+        })
     }
   }
 }

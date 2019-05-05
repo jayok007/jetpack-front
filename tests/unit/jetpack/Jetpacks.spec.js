@@ -10,13 +10,12 @@ describe('Jetpacks.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    httpClient.get = jest.fn(() => Promise.resolve([]))
-    httpClient.post = jest.fn((_, j) =>
-      Promise.resolve({
-        id: 'my-id',
-        name: j.name,
-        image: j.image
-      })
+    httpClient.get = jest.fn(() =>
+      Promise.resolve([{ id: 'test', name: 'Name', image: 'Image' }])
+    )
+    httpClient.post = jest.fn(() => Promise.resolve({}))
+    httpClient.put = jest.fn(() =>
+      Promise.resolve({ id: 'test', name: 'Updated', image: 'Updated' })
     )
     encodeImageFile.mockReturnValue(Promise.resolve('Image'))
 
@@ -53,5 +52,31 @@ describe('Jetpacks.vue', () => {
     form.vm.$emit('cancel')
 
     expect(form.isVisible()).toBe(false)
+  })
+
+  it('should update a jetpack', () => {
+    const firstJetpack = wrapper.find('[data-test="jetpack"]')
+
+    firstJetpack.vm.$emit('update', {
+      id: 'test',
+      name: 'Updated',
+      image: 'Updated'
+    })
+
+    expect(httpClient.put).toHaveBeenCalledWith('/api/jetpacks/test', {
+      name: 'Updated',
+      image: 'Updated'
+    })
+  })
+
+  it('should mutate the old jetpack', async () => {
+    const firstJetpack = wrapper.find('[data-test="jetpack"]')
+
+    firstJetpack.vm.$emit('update', { id: 'test' })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.jetpacks).toEqual([
+      { id: 'test', name: 'Updated', image: 'Updated' }
+    ])
   })
 })
