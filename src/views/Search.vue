@@ -89,7 +89,13 @@
         </v-flex>
       </v-layout>
       <div class="text-xs-center">
-        <v-btn round color="" data-test="newSearch" @click="newSearch" dark>
+        <v-btn
+          round
+          color=""
+          data-test="newSearch"
+          @click="isSearchOn = true"
+          dark
+        >
           Nouvelle recherche
         </v-btn>
       </div>
@@ -116,9 +122,6 @@ export default {
     jetpacks: []
   }),
   methods: {
-    newSearch() {
-      this.isSearchOn = true
-    },
     searchJetpack() {
       this.isSearchOn = false
       httpClient
