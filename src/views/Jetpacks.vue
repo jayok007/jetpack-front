@@ -16,52 +16,11 @@
         </v-btn>
       </template>
 
-      <v-card data-test="createJetpackForm">
-        <v-card-title class="headline">Créer un jetpack</v-card-title>
-
-        <v-card-text>
-          <v-form ref="form">
-            <v-text-field
-              v-model="name"
-              data-test="nameInput"
-              label="Nom"
-              :rules="[v => !!v || 'Champ obligatoire']"
-            ></v-text-field>
-            <v-text-field
-              ref="inputFileName"
-              :value="fileName"
-              prepend-inner-icon="image"
-              label="Image"
-              @click="$refs.inputFile.click()"
-              @keyup.enter="$refs.inputFile.click()"
-              readonly
-              :rules="[v => !!v || 'Champ obligatoire']"
-            ></v-text-field>
-            <input
-              ref="inputFile"
-              v-show="false"
-              accept="image/*"
-              @change="loadImage"
-              type="file"
-              data-test="imageInput"
-            />
-            <v-img v-show="image" :src="image" width="150"></v-img>
-          </v-form>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            data-test="saveBtn"
-            :loading="!dialog"
-            color="primary"
-            outline
-            @click="saveJetpack"
-            >Créer</v-btn
-          >
-          <v-btn color="primary" outline @click="dialog = false">Annuler</v-btn>
-        </v-card-actions>
-      </v-card>
+      <jetpack-form
+        data-test="createJetpackForm"
+        @addJetpack="saveJetpack"
+        @cancel="dialog = false"
+      ></jetpack-form>
     </v-dialog>
 
     <v-layout row wrap>
@@ -80,21 +39,19 @@
 <script>
 import httpClient from '@/httpClient'
 import Jetpack from '@/components/Jetpack'
-import { encodeImageFile } from '../utils'
+import JetpackForm from '@/components/JetpackForm'
 
 export default {
   name: 'Jetpacks',
 
   components: {
-    Jetpack
+    Jetpack,
+    JetpackForm
   },
 
   data() {
     return {
       jetpacks: [],
-      name: '',
-      image: '',
-      fileName: '',
       dialog: false
     }
   },
@@ -103,40 +60,15 @@ export default {
     httpClient.get('/api/jetpacks').then(jetpacks => (this.jetpacks = jetpacks))
   },
 
-  watch: {
-    dialog() {
-      if (!this.dialog) {
-        this.name = ''
-        this.image = ''
-        this.fileName = ''
-        this.$refs.inputFile.value = null
-        this.$refs.form.resetValidation()
-      }
-    }
-  },
-
   methods: {
-    saveJetpack() {
-      if (!this.$refs.form.validate()) return
-
+    saveJetpack({ name, image }) {
       httpClient
         .post('/api/jetpacks', {
-          name: this.name,
-          image: this.image
+          name,
+          image
         })
         .then(jetpack => this.jetpacks.push(jetpack))
         .finally(() => (this.dialog = false))
-    },
-
-    async loadImage({
-      target: {
-        files: [img]
-      }
-    }) {
-      if (!img) return
-
-      this.fileName = img.name
-      this.image = await encodeImageFile(img)
     }
   }
 }
