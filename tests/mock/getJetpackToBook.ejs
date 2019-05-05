@@ -5,7 +5,7 @@
 
   logger.info(`Filtre sur les jetpack booked (sans tenir compte des dates)`)
 
-  var idBookings = state.bookings.map((item)=>{
+  const idBookings = state.bookings.map((item)=>{
       return item.idJetpack
   })
   

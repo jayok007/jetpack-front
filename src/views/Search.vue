@@ -80,6 +80,7 @@
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="(jetpack, i) in jetpacks" :key="i">
           <jetpack
+            data-test="searchJetpacks"
             :id="jetpack.id"
             :name="jetpack.name"
             :image="jetpack.image"
@@ -124,11 +125,13 @@ export default {
   methods: {
     searchJetpack() {
       this.isSearchOn = false
-      httpClient
-        .get('/api/availability/jetpacks', {
-          params: { dateStart: this.dateStart, dateEnd: this.dateEnd }
-        })
-        .then(jetpacks => (this.jetpacks = jetpacks))
+      const url =
+        '/api/availability/jetpacks?dateStart="' +
+        this.dateStart +
+        '"&dateEnd="' +
+        this.dateEnd +
+        '"'
+      httpClient.get(url).then(jetpacks => (this.jetpacks = jetpacks))
     },
     bookJetpack(idJetpack) {
       httpClient
