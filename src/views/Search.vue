@@ -135,7 +135,7 @@ export default {
     },
     bookJetpack(idJetpack) {
       httpClient
-        .post('/api/booking', {
+        .post('/api/jetpacks/booking', {
           idJetpack: idJetpack,
           dateStart: this.dateStart,
           dateEnd: this.dateEnd
