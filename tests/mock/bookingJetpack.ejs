@@ -1,0 +1,31 @@
+(request, state, logger) => {
+  let jetpacks = <% include jetpacks.json %>
+  state.bookings = state.bookings || <% include bookings.json %>
+
+
+  const { idJetpack, dateStart, dateEnd } = JSON.parse(request.body)
+
+  logger.info(`Generate fake booking`)
+
+  const booking = {
+    idJetpack,
+    dateStart,
+    dateEnd
+  }
+  state.bookings.push(booking)
+
+  const idBookings = state.bookings.map((item)=>{
+    return item.idJetpack
+})
+
+state.jetpackNotBooked = jetpacks.filter((item) => {
+  return (!idBookings.includes(item.id));
+})
+  
+  return {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: state.jetpackNotBooked
+  }
+}

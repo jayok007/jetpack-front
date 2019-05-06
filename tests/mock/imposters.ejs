@@ -22,6 +22,22 @@
         },
         {
           "predicates": [
+            { "equals": { "method": "GET", "path": "/availability/jetpacks" } }
+          ],
+          "responses": [
+            { "inject": "<%- stringify(filename, 'getJetpackToBook.ejs') %>" }
+          ]
+        },
+        {
+          "predicates": [
+            { "equals": { "method": "POST", "path": "/booking" } }
+          ],
+          "responses": [
+            { "inject": "<%- stringify(filename, 'bookingJetpack.ejs') %>" }
+          ]
+        },
+        {
+          "predicates": [
             { "equals": { "method": "PUT", "path": "/jetpacks/a8019ec0-bfdc-4140-9dbb-4927e5ef5c8d" } }
           ],
           "responses": [

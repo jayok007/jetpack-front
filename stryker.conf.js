@@ -7,7 +7,7 @@ module.exports = config => {
       command: 'npx vue-cli-service test:unit'
     },
     thresholds: {
-      break: 70
+      break: 65
     }
   })
 }

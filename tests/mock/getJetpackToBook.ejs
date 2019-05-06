@@ -1,0 +1,24 @@
+(request, state, logger) => {
+  state.jetpackNotBooked = state.jetpackNotBooked || []
+  let jetpacks = <% include jetpacks.json %>
+  state.bookings = state.bookings || <% include bookings.json %>
+
+  logger.info(`Filtre sur les jetpack booked (sans tenir compte des dates)`)
+
+  const idBookings = state.bookings.map((item)=>{
+      return item.idJetpack
+  })
+  
+  
+  state.jetpackNotBooked = jetpacks.filter((item) => {
+    return (!idBookings.includes(item.id));
+  })
+
+
+  return {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: state.jetpackNotBooked
+  }
+}

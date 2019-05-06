@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Jetpacks from './views/Jetpacks.vue'
+import Search from './views/Search.vue'
 
 Vue.use(Router)
 
@@ -12,6 +13,11 @@ export default new Router({
       path: '/',
       name: 'jetpacks',
       component: Jetpacks
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: Search
     }
     // {
     //   path: '/about',
