@@ -3,7 +3,6 @@ import httpClient from '@/httpClient'
 import Search from '@/views/Search'
 
 jest.mock('@/httpClient')
-jest.mock('@/utils')
 
 describe('Search.vue', () => {
   let wrapper
@@ -22,20 +21,21 @@ describe('Search.vue', () => {
 
     wrapper = mount(Search)
   })
+
   it('should display the dialog', () => {
     const dateStart = new Date().toISOString().substr(0, 10)
     const dateEnd = new Date().toISOString().substr(0, 10)
+
     wrapper.find('[data-test="searchBtn"]').trigger('click')
-    expect(httpClient.get).toHaveBeenCalledWith(
-      '/api/availability/jetpacks?dateStart="' +
-        dateStart +
-        '"&dateEnd="' +
-        dateEnd +
-        '"'
-    )
+
+    expect(httpClient.get).toHaveBeenCalledWith(`/api/availability/jetpacks`, {
+      dateStart,
+      dateEnd
+    })
     const result = wrapper.find('[data-test="searchResult"]')
     expect(result.isVisible()).toBe(true)
   })
+
   it('should display the book a jetpack ', async () => {
     const dateStart = new Date().toISOString().substr(0, 10)
     const dateEnd = new Date().toISOString().substr(0, 10)
@@ -43,13 +43,10 @@ describe('Search.vue', () => {
     wrapper.find('[data-test="searchBtn"]').trigger('click')
     await wrapper.vm.$nextTick()
 
-    expect(httpClient.get).toHaveBeenCalledWith(
-      '/api/availability/jetpacks?dateStart="' +
-        dateStart +
-        '"&dateEnd="' +
-        dateEnd +
-        '"'
-    )
+    expect(httpClient.get).toHaveBeenCalledWith(`/api/availability/jetpacks`, {
+      dateStart,
+      dateEnd
+    })
 
     wrapper.find('[data-test="bookingBtn"]').trigger('click')
 

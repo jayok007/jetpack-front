@@ -65,12 +65,12 @@
         <v-btn
           data-test="searchBtn"
           round
-          color=""
+          color
           v-if="isSearchOn"
           @click="searchJetpack"
           dark
-          >Rechercher
-        </v-btn>
+          >Rechercher</v-btn
+        >
       </div>
     </v-container>
     <v-container v-if="!isSearchOn">
@@ -90,53 +90,51 @@
         </v-flex>
       </v-layout>
       <div class="text-xs-center">
-        <v-btn
-          round
-          color=""
-          data-test="newSearch"
-          @click="isSearchOn = true"
-          dark
+        <v-btn round color data-test="newSearch" @click="isSearchOn = true" dark
+          >Nouvelle recherche</v-btn
         >
-          Nouvelle recherche
-        </v-btn>
       </div>
     </v-container>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import Jetpack from '@/components/Jetpack.vue'
 import httpClient from '@/httpClient'
 
 export default {
   name: 'Search',
+
   components: {
     Jetpack
   },
-  data: () => ({
-    dateStart: new Date().toISOString().substr(0, 10),
-    dateEnd: new Date().toISOString().substr(0, 10),
-    menu1: false,
-    menu2: false,
-    isSearchOn: true,
-    jetpacks: []
-  }),
+
+  data() {
+    return {
+      dateStart: new Date().toISOString().substr(0, 10),
+      dateEnd: new Date().toISOString().substr(0, 10),
+      menu1: false,
+      menu2: false,
+      isSearchOn: true,
+      jetpacks: []
+    }
+  },
+
   methods: {
     searchJetpack() {
       this.isSearchOn = false
-      const url =
-        '/api/availability/jetpacks?dateStart="' +
-        this.dateStart +
-        '"&dateEnd="' +
-        this.dateEnd +
-        '"'
-      httpClient.get(url).then(jetpacks => (this.jetpacks = jetpacks))
+
+      httpClient
+        .get('/api/availability/jetpacks', {
+          dateStart: this.dateStart,
+          dateEnd: this.dateEnd
+        })
+        .then(jetpacks => (this.jetpacks = jetpacks))
     },
+
     bookJetpack(idJetpack) {
       httpClient
-        .post('/api/jetpacks/booking', {
-          idJetpack: idJetpack,
+        .post(`/api/jetpacks/${idJetpack}/bookings`, {
           dateStart: this.dateStart,
           dateEnd: this.dateEnd
         })

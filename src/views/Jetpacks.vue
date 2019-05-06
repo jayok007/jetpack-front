@@ -73,7 +73,6 @@ export default {
     },
 
     updateJetpack({ id, name, image }) {
-      console.log(id)
       httpClient
         .put(`/api/jetpacks/${id}`, { name, image })
         .then(updatedJetpack => {

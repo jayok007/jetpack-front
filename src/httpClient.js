@@ -11,8 +11,14 @@ export default {
       .then(res => res.json())
   },
 
-  get(url) {
-    return this.fetch(url, 'GET')
+  get(url, payload) {
+    const query = payload
+      ? '?' +
+        Object.entries(payload)
+          .map(([k, v]) => `${k}=${v}`)
+          .join('&')
+      : ''
+    return this.fetch(url + query, 'GET')
   },
 
   post(url, payload) {

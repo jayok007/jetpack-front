@@ -21,30 +21,48 @@ describe('httpClient', () => {
     expect(res).toBe('test')
   })
 
-  it('should send a get request', async () => {
+  it('should send a get request', () => {
     httpClient.fetch = jest.fn()
-    await httpClient.get('/toto')
+
+    httpClient.get('/toto')
 
     expect(httpClient.fetch).toHaveBeenCalledWith('/toto', 'GET')
   })
 
-  it('should send a post request', async () => {
+  it('should build a query for a get request', async () => {
     httpClient.fetch = jest.fn()
-    await httpClient.post('/toto', payload)
+
+    await httpClient.get('/toto', {
+      aaa: 'test1',
+      bbb: 'test2'
+    })
+
+    expect(httpClient.fetch).toHaveBeenCalledWith(
+      '/toto?aaa=test1&bbb=test2',
+      'GET'
+    )
+  })
+
+  it('should send a post request', () => {
+    httpClient.fetch = jest.fn()
+
+    httpClient.post('/toto', payload)
 
     expect(httpClient.fetch).toHaveBeenCalledWith('/toto', 'POST', payload)
   })
 
-  it('should send a put request', async () => {
+  it('should send a put request', () => {
     httpClient.fetch = jest.fn()
-    await httpClient.put('/toto', payload)
+
+    httpClient.put('/toto', payload)
 
     expect(httpClient.fetch).toHaveBeenCalledWith('/toto', 'PUT', payload)
   })
 
-  it('should send a delete request', async () => {
+  it('should send a delete request', () => {
     httpClient.fetch = jest.fn()
-    await httpClient.delete('/toto/1')
+
+    httpClient.delete('/toto/1')
 
     expect(httpClient.fetch).toHaveBeenCalledWith('/toto/1', 'DELETE')
   })
